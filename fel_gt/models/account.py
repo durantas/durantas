@@ -211,6 +211,10 @@ class AccountMove(models.Model):
             total_linea = precio_unitario * linea.quantity
             total_linea_base = precio_unitario_base * linea.quantity
             total_impuestos = total_linea - total_linea_base
+            # Modificación 01/09/2022, VHEM
+            if total_impuestos < 0:
+                total_impuestos = 0
+            # Fin Modificación 01/09/2022, VHEM
             cantidad_impuestos += len(linea.tax_ids)
 
             Item = etree.SubElement(Items, DTE_NS+"Item", BienOServicio=tipo_producto, NumeroLinea=str(linea_num))
@@ -245,6 +249,10 @@ class AccountMove(models.Model):
             gran_subtotal += factura.currency_id.round(total_linea_base)
             gran_total_impuestos += factura.currency_id.round(total_impuestos)
 
+        # Modificación 01/09/2022, VHEM
+        if gran_total_impuestos < 0:    
+            gran_total_impuestos = 0
+        # Fin Modificación 01/09/2022, VHEM
         Totales = etree.SubElement(DatosEmision, DTE_NS+"Totales")
         TotalImpuestos = etree.SubElement(Totales, DTE_NS+"TotalImpuestos")
         TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
