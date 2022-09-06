@@ -314,9 +314,11 @@ class AccountMove(models.Model):
                 total_isr = abs(factura.amount_tax)
 
                 total_iva_retencion = 0
-                for impuesto in factura.tax_totals_json:
-                    if impuesto[1] > 0:
-                        total_iva_retencion += impuesto[1]
+                total_iva_retencion = abs(gran_total_impuestos) - total_isr
+                
+                #for impuesto in factura.amount_by_group:
+                #    if impuesto[1] > 0:
+                #        total_iva_retencion += impuesto[1]
 
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
                 RetencionesFacturaEspecial = etree.SubElement(Complemento, CFE_NS+"RetencionesFacturaEspecial", Version="1", nsmap=NSMAP_FE)
