@@ -184,10 +184,12 @@ class AccountMove(models.Model):
         if tipo_documento_fel not in ['NDEB', 'NCRE', 'RECI', 'NABN', 'FESP']:
             ElementoFrases = etree.fromstring(factura.company_id.frases_fel)
             DatosEmision.append(ElementoFrases)
-
+        
+         # Modificación 26/09/2022, VHEM
         if tipo_documento_fel in ['FESP']:
-            ElementoFrases = "<frases><frase><tipo-frase>16</tipo-frase><codigo-escenario>1</codigo-escenario><fecha-resolucion nil=\"true\" /><numero-resolucion nil=\"true\" /><descripcion>*El vendedor o prestador de servicio se negó a emitir la factura correspondiente. (art. 52 Ley del IVA)</descripcion></frase></frases>"
+            ElementoFrases = etree.fromstring("<frases><frase><tipo-frase>16</tipo-frase><codigo-escenario>1</codigo-escenario><fecha-resolucion nil=\"true\" /><numero-resolucion nil=\"true\" /><descripcion>*El vendedor o prestador de servicio se negó a emitir la factura correspondiente. (art. 52 Ley del IVA)</descripcion></frase></frases>")
             DatosEmision.append(ElementoFrases)
+         # Fin deModificación 26/09/2022, VHEM
 
         Items = etree.SubElement(DatosEmision, DTE_NS+"Items")
 
