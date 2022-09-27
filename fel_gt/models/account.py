@@ -187,7 +187,7 @@ class AccountMove(models.Model):
         
          # Modificación 26/09/2022, VHEM
         if tipo_documento_fel in ['FESP']:
-            ElementoFrases = etree.fromstring("<dte:Frases xmlns:dte=\"http://www.sat.gob.gt/dte/fel/0.2.0\"><dte:Frase CodigoEscenario=\"1\" TipoFrase=\"5\" Descripcion=\"*El vendedor o prestador de servicio se negó a emitir la factura correspondiente. (art. 52 Ley del IVA)\"></dte:Frase></dte:Frases>")
+            ElementoFrases = etree.fromstring("<dte:Frases xmlns:dte=\"http://www.sat.gob.gt/dte/fel/0.2.0\"><dte:Frase CodigoEscenario=\"1\" TipoFrase=\"5\"></dte:Frase></dte:Frases>")
             DatosEmision.append(ElementoFrases)
          # Fin deModificación 26/09/2022, VHEM
 
