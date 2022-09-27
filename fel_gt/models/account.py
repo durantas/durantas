@@ -185,6 +185,10 @@ class AccountMove(models.Model):
             ElementoFrases = etree.fromstring(factura.company_id.frases_fel)
             DatosEmision.append(ElementoFrases)
 
+        if tipo_documento_fel in ['FESP']:
+            ElementoFrases = "<frases><frase><tipo-frase>16</tipo-frase><codigo-escenario>1</codigo-escenario><fecha-resolucion nil=\"true\" /><numero-resolucion nil=\"true\" /><descripcion>*El vendedor o prestador de servicio se negó a emitir la factura correspondiente. (art. 52 Ley del IVA)</descripcion></frase></frases>"
+            DatosEmision.append(ElementoFrases)
+
         Items = etree.SubElement(DatosEmision, DTE_NS+"Items")
 
         linea_num = 0
