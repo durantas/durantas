@@ -317,7 +317,9 @@ class AccountMove(models.Model):
                 CodigoExportador.text = factura.exportador_fel.ref or "-" if factura.exportador_fel else "-"
 
             if tipo_documento_fel in ['FESP']:
-                total_isr = abs(factura.amount_tax)
+                # Modificación 11/10/2022, VHEM
+                total_isr = abs(factura.currency_id.round(factura.amount_tax))
+                # Fin Modificación 11/10/2022, VHEM
 
                 total_iva_retencion = 0
                 total_iva_retencion = abs(gran_total_impuestos) #- total_isr
@@ -329,7 +331,9 @@ class AccountMove(models.Model):
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
                 RetencionesFacturaEspecial = etree.SubElement(Complemento, CFE_NS+"RetencionesFacturaEspecial", Version="1", nsmap=NSMAP_FE)
                 RetencionISR = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"RetencionISR")
+                # Modificación 11/10/2022, VHEM
                 RetencionISR.text = str(total_isr)
+                # Fin dem odificación 11/10/2022, VHEM
                 RetencionIVA = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"RetencionIVA")
                 RetencionIVA.text = str(total_iva_retencion)
                 TotalMenosRetenciones = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"TotalMenosRetenciones")
