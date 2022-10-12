@@ -197,6 +197,7 @@ class AccountMove(models.Model):
         gran_subtotal = 0
         gran_total = 0
         gran_total_impuestos = 0
+        gran_total_impuestos1 = 0
         cantidad_impuestos = 0
         self.descuento_lineas()
         
@@ -318,11 +319,15 @@ class AccountMove(models.Model):
 
             if tipo_documento_fel in ['FESP']:
                 # Modificación 11/10/2022, VHEM
-                total_isr = abs(factura.currency_id.round(factura.amount_tax))
+                #total_isr = abs(factura.amount_tax)  # Modificación 12/10/2022, VHEM para calcularlo restando GranTotal - total_iva_retencion - factura.amount_total #
                 # Fin Modificación 11/10/2022, VHEM
 
                 total_iva_retencion = 0
                 total_iva_retencion = abs(gran_total_impuestos) #- total_isr
+                
+                # Modificación 12/10/2022, VHEM
+                total_isr = abs(gran_total) - total_iva_retencion - abs(factura.amount_total)
+                # Modificación 12/10/2022, VHEM
                 
                 #for impuesto in factura.amount_by_group:
                 #    if impuesto[1] > 0:
