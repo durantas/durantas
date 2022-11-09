@@ -283,7 +283,7 @@ class AccountMove(models.Model):
         Totales = etree.SubElement(DatosEmision, DTE_NS+"Totales")
         TotalImpuestos = etree.SubElement(Totales, DTE_NS+"TotalImpuestos")
         # Modificación 09/11/2022, VHEM
-#        TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
+        #TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
         TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.6f}'.format(factura.currency_id.round(gran_total_impuestos)))
         # Fin Modificación 09/11/2022, VHEM
         
