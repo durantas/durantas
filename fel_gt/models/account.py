@@ -342,22 +342,17 @@ class AccountMove(models.Model):
                 total_iva_retencion = 0
                 total_iva_retencion = abs(gran_total_impuestos) #- total_isr
                 
-                # Modificación 12/10/2022, VHEM
-                total_isr = abs(gran_total) - total_iva_retencion - abs(factura.amount_total)
+                # Modificación 12/10/2022, VHEM, 09/11/2022 VHEM
+                #total_isr = abs(gran_total) - total_iva_retencion - abs(factura.amount_total)
+                total_sin_iva = abs(gran_total) - total_iva_retencion
+                total_isr = (total_sin_iva)*0.05
+                if  total_sin_iva > 30000 then
+                    total_isr = 1500 + ((total_sin_iva-30000)*0.07)
                 # Fin Modificación 12/10/2022, VHEM
                 
                 #for impuesto in factura.amount_by_group:
                 #    if impuesto[1] > 0:
                 #        total_iva_retencion += impuesto[1]
-
-
-                # Modificación 09/11/2022, VHEM
-                # gran_total_fesp, gran_subtotal_fesp, gran_total_impuestos_fesp
-                # Solo lleva IVA
-                total_iva_retencion = abs(gran_total_impuestos_fesp)
-                # Calcula el ISR
-                total_isr = abs(gran_total_fesp) - total_iva_retencion - abs(factura.amount_total)
-                # Fin Modificación 09/11/2022, VHEM
 
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
                 RetencionesFacturaEspecial = etree.SubElement(Complemento, CFE_NS+"RetencionesFacturaEspecial", Version="1", nsmap=NSMAP_FE)
