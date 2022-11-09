@@ -257,9 +257,15 @@ class AccountMove(models.Model):
             Total = etree.SubElement(Item, DTE_NS+"Total")
             Total.text = '{:.3f}'.format(total_linea)
 
-            gran_total += factura.currency_id.round(total_linea)
-            gran_subtotal += factura.currency_id.round(total_linea_base)
-            gran_total_impuestos += factura.currency_id.round(total_impuestos)
+
+            # Modificación 09/11/2022, VHEM
+            #gran_total += factura.currency_id.round(total_linea)
+            #gran_subtotal += factura.currency_id.round(total_linea_base)
+            #gran_total_impuestos += factura.currency_id.round(total_impuestos)
+            gran_total += total_linea
+            gran_subtotal += total_linea_base
+            gran_total_impuestos += total_impuestos
+            # Fin Modificación 09/11/2022, VHEM
             
             gran_total_fesp += total_linea
             gran_subtotal_fesp += total_linea_base
@@ -280,8 +286,11 @@ class AccountMove(models.Model):
 #        TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
         TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.6f}'.format(factura.currency_id.round(gran_total_impuestos)))
         # Fin Modificación 09/11/2022, VHEM
+        
+        # Modificación 09/11/2022, VHEM
         GranTotal = etree.SubElement(Totales, DTE_NS+"GranTotal")
-        GranTotal.text = '{:.3f}'.format(factura.currency_id.round(gran_total))
+        #GranTotal.text = '{:.3f}'.format(factura.currency_id.round(gran_total))
+        GranTotal.text = '{:.6f}'.format(factura.currency_id.round(gran_total))
 
         if DatosEmision.find("{http://www.sat.gob.gt/dte/fel/0.2.0}Frases") and factura.currency_id.is_zero(gran_total_impuestos) and (factura.company_id.afiliacion_iva_fel or 'GEN') == 'GEN':
             Frase = etree.SubElement(DatosEmision.find("{http://www.sat.gob.gt/dte/fel/0.2.0}Frases"), DTE_NS+"Frase", CodigoEscenario=str(factura.frase_exento_fel) if factura.frase_exento_fel else "1", TipoFrase="4")
@@ -310,7 +319,9 @@ class AccountMove(models.Model):
                 FechaVencimiento = etree.SubElement(Abono, CFC_NS+"FechaVencimiento")
                 FechaVencimiento.text = str(factura.invoice_date_due)
                 MontoAbono = etree.SubElement(Abono, CFC_NS+"MontoAbono")
-                MontoAbono.text = '{:.3f}'.format(gran_total)
+                # Modificación 09/11/2022, VHEM
+                #MontoAbono.text = '{:.3f}'.format(gran_total)
+                MontoAbono.text = '{:.6f}'.format(gran_total)
 
             if tipo_documento_fel in ['FACT', 'FCAM'] and factura.tipo_gasto == 'importacion':
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="text", NombreComplemento="text", URIComplemento="http://www.sat.gob.gt/face2/ComplementoExportaciones/0.1.0")
