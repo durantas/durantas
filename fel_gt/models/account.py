@@ -200,6 +200,11 @@ class AccountMove(models.Model):
         gran_total_impuestos1 = 0
         cantidad_impuestos = 0
         self.descuento_lineas()
+
+        gran_total_fesp = 0
+        gran_subtotal_fesp = 0
+        gran_total_impuestos_fesp = 0
+
         
         for linea in factura.invoice_line_ids:
 
@@ -255,6 +260,10 @@ class AccountMove(models.Model):
             gran_total += factura.currency_id.round(total_linea)
             gran_subtotal += factura.currency_id.round(total_linea_base)
             gran_total_impuestos += factura.currency_id.round(total_impuestos)
+            
+            gran_total_fesp += total_linea
+            gran_subtotal_fesp += total_linea_base
+            gran_total_impuestos_fesp += total_impuestos
 
         # Modificación 01/09/2022, VHEM
         if gran_total_impuestos < 0:    
@@ -327,11 +336,21 @@ class AccountMove(models.Model):
                 
                 # Modificación 12/10/2022, VHEM
                 total_isr = abs(gran_total) - total_iva_retencion - abs(factura.amount_total)
-                # Modificación 12/10/2022, VHEM
+                # Fin Modificación 12/10/2022, VHEM
                 
                 #for impuesto in factura.amount_by_group:
                 #    if impuesto[1] > 0:
                 #        total_iva_retencion += impuesto[1]
+
+
+                # Modificación 09/11/2022, VHEM
+                # gran_total_fesp, gran_subtotal_fesp, gran_total_impuestos_fesp
+                # Solo lleva IVA
+                total_iva_retencion = abs(gran_total_impuestos_fesp)
+                # Calcula el ISR
+                total_isr = abs(gran_total_fesp) - total_iva_retencion - abs(factura.amount_total)
+                # Fin Modificación 09/11/2022, VHEM
+
 
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
                 RetencionesFacturaEspecial = etree.SubElement(Complemento, CFE_NS+"RetencionesFacturaEspecial", Version="1", nsmap=NSMAP_FE)
