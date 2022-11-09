@@ -366,7 +366,8 @@ class AccountMove(models.Model):
                 RetencionIVA.text = '{:.6f}'.format(total_iva_retencion)
                 
                 TotalMenosRetenciones = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"TotalMenosRetenciones")
-                TotalMenosRetenciones.text = '{:.6f}'.format(factura.amount_total)
+                #TotalMenosRetenciones.text = '{:.6f}'.format(factura.amount_total)
+                TotalMenosRetenciones.text = '{:.6f}'.format(abs(gran_total) - total_iva_retencion - total_isr)
 
         # signature = xmlsig.template.create(
         #     xmlsig.constants.TransformInclC14N,
