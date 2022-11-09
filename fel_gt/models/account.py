@@ -272,6 +272,8 @@ class AccountMove(models.Model):
         Totales = etree.SubElement(DatosEmision, DTE_NS+"Totales")
         TotalImpuestos = etree.SubElement(Totales, DTE_NS+"TotalImpuestos")
         TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
+        if tipo_documento_fel in ['FESP']:
+            gran_total = gran_total_fesp
         GranTotal = etree.SubElement(Totales, DTE_NS+"GranTotal")
         GranTotal.text = '{:.3f}'.format(factura.currency_id.round(gran_total))
 
@@ -349,7 +351,6 @@ class AccountMove(models.Model):
                 total_iva_retencion = abs(gran_total_impuestos_fesp)
                 # Calcula el ISR
                 total_isr = abs(gran_total_fesp) - total_iva_retencion - abs(factura.amount_total)
-                gran_total = gran_total_fesp
                 # Fin Modificación 09/11/2022, VHEM
 
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
