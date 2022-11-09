@@ -346,7 +346,7 @@ class AccountMove(models.Model):
                 #total_isr = abs(gran_total) - total_iva_retencion - abs(factura.amount_total)
                 total_sin_iva = abs(gran_total) - total_iva_retencion
                 total_isr = (total_sin_iva)*0.05
-                if  total_sin_iva > 30000 then
+                if  total_sin_iva > 30000 then:
                     total_isr = 1500 + ((total_sin_iva-30000)*0.07)
                 # Fin Modificación 12/10/2022, VHEM
                 
