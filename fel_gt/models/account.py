@@ -349,19 +349,22 @@ class AccountMove(models.Model):
                 total_iva_retencion = abs(gran_total_impuestos_fesp)
                 # Calcula el ISR
                 total_isr = abs(gran_total_fesp) - total_iva_retencion - abs(factura.amount_total)
+                gran_total = gran_total_fesp
                 # Fin Modificación 09/11/2022, VHEM
-
 
                 Complemento = etree.SubElement(Complementos, DTE_NS+"Complemento", IDComplemento="FacturaEspecial", NombreComplemento="FacturaEspecial", URIComplemento="http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0")
                 RetencionesFacturaEspecial = etree.SubElement(Complemento, CFE_NS+"RetencionesFacturaEspecial", Version="1", nsmap=NSMAP_FE)
-                RetencionISR = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"RetencionISR")
+                
                 # Modificación 11/10/2022, VHEM
-                RetencionISR.text = str(total_isr)
+                RetencionISR = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"RetencionISR")
+                RetencionISR.text = '{:.6f}'.format(total_isr)
                 # Fin dem odificación 11/10/2022, VHEM
+                
                 RetencionIVA = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"RetencionIVA")
-                RetencionIVA.text = str(total_iva_retencion)
+                RetencionIVA.text = '{:.6f}'.format(total_iva_retencion)
+                
                 TotalMenosRetenciones = etree.SubElement(RetencionesFacturaEspecial, CFE_NS+"TotalMenosRetenciones")
-                TotalMenosRetenciones.text = str(factura.amount_total)
+                TotalMenosRetenciones.text = '{:.6f}'.format(factura.amount_total)
 
         # signature = xmlsig.template.create(
         #     xmlsig.constants.TransformInclC14N,
