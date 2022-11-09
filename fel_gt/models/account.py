@@ -269,11 +269,17 @@ class AccountMove(models.Model):
         if gran_total_impuestos < 0:    
             gran_total_impuestos = 0
         # Fin Modificación 01/09/2022, VHEM
-        Totales = etree.SubElement(DatosEmision, DTE_NS+"Totales")
-        TotalImpuestos = etree.SubElement(Totales, DTE_NS+"TotalImpuestos")
-        TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
         if tipo_documento_fel in ['FESP']:
             gran_total = gran_total_fesp
+            gran_subtotal = gran_subtotal_fesp
+            gran_total_impuestos = gran_total_impuestos_fesp
+
+        Totales = etree.SubElement(DatosEmision, DTE_NS+"Totales")
+        TotalImpuestos = etree.SubElement(Totales, DTE_NS+"TotalImpuestos")
+        # Modificación 09/11/2022, VHEM
+#        TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.3f}'.format(factura.currency_id.round(gran_total_impuestos)))
+        TotalImpuesto = etree.SubElement(TotalImpuestos, DTE_NS+"TotalImpuesto", NombreCorto="IVA", TotalMontoImpuesto='{:.6f}'.format(factura.currency_id.round(gran_total_impuestos)))
+        # Fin Modificación 09/11/2022, VHEM
         GranTotal = etree.SubElement(Totales, DTE_NS+"GranTotal")
         GranTotal.text = '{:.3f}'.format(factura.currency_id.round(gran_total))
 
