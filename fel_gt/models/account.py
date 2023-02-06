@@ -167,7 +167,8 @@ class AccountMove(models.Model):
         if factura.partner_id.email:
             Receptor.attrib['CorreoReceptor'] = factura.partner_id.email
         #if tipo_documento_fel == "FESP" and factura.partner_id.cui:
-        if (tipo_documento_fel == "FESP" or (tipo_documento_fel == "FACT" and factura.currency_id.round(gran_total)>2500)) and factura.partner_id.cui:
+        #if (tipo_documento_fel == "FESP" or (tipo_documento_fel == "FACT" and factura.currency_id.round(gran_total)>2500)) and factura.partner_id.cui:
+        if (tipo_documento_fel == "FESP" or tipo_documento_fel == "FACT") and factura.partner_id.cui:
             Receptor.attrib['TipoEspecial'] = "CUI"
 
         DireccionReceptor = etree.SubElement(Receptor, DTE_NS+"DireccionReceptor")
